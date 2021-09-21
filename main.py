@@ -18,7 +18,7 @@ def Vader(value):
 @app.route('/clean/<string:value>', methods=['GET'])
 def tokenizeSample(value):
     textClean = TextCleaning(value)
-    return textClean.pos_tagging()
+    return textClean.finalTextForm()
 
 
 if __name__ == '__main__':

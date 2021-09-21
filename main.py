@@ -1,3 +1,4 @@
+from TextCleaning import TextCleaning
 from SentimentLogic import SentimentLogic
 from flask import Flask
 
@@ -14,7 +15,10 @@ def Vader(value):
     return SentimentLogic.sentiment_scores_vader(value)
 
 
-
+@app.route('/clean/<string:value>', methods=['GET'])
+def tokenizeSample(value):
+    textClean = TextCleaning(value)
+    return textClean.pos_tagging()
 
 
 if __name__ == '__main__':

@@ -51,4 +51,7 @@ class TextCleaning:
         self.clean()
         tokens = self.tokenize()
         self.stop_words_remove(tokens)
-        return str(self.lemmatization(self.pos_tagging()))
+        posTags = self.pos_tagging()
+        lemmas = self.lemmatization(posTags)
+        return str(lemmas)
+       

@@ -4,12 +4,12 @@ from flask import Flask
 app = Flask(__name__)
 
 
-@app.route('/Welcome/<int:value>', methods=['GET', 'POST'])
-def welcome(value):
-    return "Hello World!" + str(value+10)
+@app.route('/', methods=['GET'])
+def welcome():
+    return "<h3>Routes: /Vader/(Enter Sentence Message here for computation)</h3>"
 
 
-@app.route('/Vader/<string:value>', methods=['GET', 'POST'])
+@app.route('/Vader/<string:value>', methods=['GET'])
 def Vader(value):
     return SentimentLogic.sentiment_scores_vader(value)
 

@@ -25,14 +25,10 @@ def sentiment_scores(sentence):
     # which contains pos, neg, neu, and compound scores.
     sentiment_dict = sid_obj.polarity_scores(sentence)
 
-    print("sentence was rated as ", sentiment_dict['neg']*100, "% Negative")
-    print("sentence was rated as ", sentiment_dict['neu']*100, "% Neutral")
-    print("sentence was rated as ", sentiment_dict['pos']*100, "% Positive")
-
-    print("Sentence Overall Rated As", end=" ")
     negativeVal = sentiment_dict['neg']*100
     neutralVal = sentiment_dict['neu']*100
     positiveVal = sentiment_dict['pos']*100
+    compoundVal = sentiment_dict['compound']*100
     compoundScore = ""
     if sentiment_dict['compound'] >= 0.05:
         compoundScore = "Positive"
@@ -44,8 +40,8 @@ def sentiment_scores(sentence):
         compoundScore = "Neutral"
 
     vaderModel = VaderModel(negativeVal, positiveVal,
-                            neutralVal, compoundScore)
-    
+                            neutralVal, compoundScore, compoundVal)
+
     return vaderModel.toJSON()
 
 

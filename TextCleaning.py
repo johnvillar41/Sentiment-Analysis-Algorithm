@@ -9,6 +9,7 @@ nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('stopwords')
 nltk.download('wordnet')
+nltk.download('sentiwordnet')
 
 pos_dict = {'J': wordnet.ADJ, 'V': wordnet.VERB,
             'N': wordnet.NOUN, 'R': wordnet.ADV}

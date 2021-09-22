@@ -12,13 +12,10 @@ def welcome():
 
 @app.route('/Vader/<string:value>', methods=['GET'])
 def Vader(value):
-    return SentimentLogic.sentiment_scores_vader(value)
+    textClean = TextCleaning(value)     
+    return SentimentLogic.sentiment_scores_vader(str(textClean.finalTextForm()))
 
-
-@app.route('/clean/<string:value>', methods=['GET'])
-def tokenizeSample(value):
-    textClean = TextCleaning(value)
-    return textClean.finalTextForm()
+#route for sentiwordnet
 
 
 if __name__ == '__main__':

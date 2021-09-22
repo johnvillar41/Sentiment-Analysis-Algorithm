@@ -22,7 +22,7 @@ class TextCleaning:
         self.textValue = textValue
 
     def clean(self):
-        self.textValue = re.sub('[^A-Za-z]+', ' ', self.textValue)
+        self.textValue = re.sub('[^A-Za-z]+', ' ', self.textValue)        
 
     def tokenize(self):
         tokens = nltk.word_tokenize(self.textValue)
@@ -35,6 +35,7 @@ class TextCleaning:
     def stop_words_remove(self, tokens):
         self.new_text = (" ").join(ele for ele in tokens if ele.lower()
                                    not in stopwords.words('english'))
+        
 
     def lemmatization(self, posTagged):
         lemma = []
@@ -51,8 +52,10 @@ class TextCleaning:
     def finalTextForm(self):
         self.clean()
         tokens = self.tokenize()
-        self.stop_words_remove(tokens)
         posTags = self.pos_tagging()
         lemmas = self.lemmatization(posTags)
-        return str(lemmas)
+        self.stop_words_remove(tokens)      
+
+        lemmasStr = re.sub('[^A-Za-z]+', ' ', str(lemmas))  
+        return str(lemmasStr)
        

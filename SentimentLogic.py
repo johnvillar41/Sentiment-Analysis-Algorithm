@@ -2,8 +2,6 @@ from flask import jsonify
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from VaderModel import VaderModel
 
-from nltk.corpus import sentiwordnet as swn
-
 class SentimentLogic:
 
     @staticmethod
@@ -34,8 +32,4 @@ class SentimentLogic:
         vaderModel = VaderModel(negativeVal, positiveVal,
                                 neutralVal, compoundScore, compoundVal)
 
-        return vaderModel.toJSON()
 
-    @staticmethod
-    def sentiwordnet(pos_data, lemma, synsets):
-        pass

@@ -32,4 +32,4 @@ class SentimentLogic:
         vaderModel = VaderModel(negativeVal, positiveVal,
                                 neutralVal, compoundScore, compoundVal)
 
-        return vaderModel.toJSON()
+

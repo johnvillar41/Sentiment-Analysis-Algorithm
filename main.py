@@ -14,6 +14,10 @@ def welcome():
 def Vader(value):
     return SentimentLogic.sentiment_scores_vader(value)
 
+@app.route('/SWN/<string:value>', methods=['GET'])
+def SWN(value):
+    return str(SentimentLogic.swn_polarity(value))
+
 
 @app.route('/clean/<string:value>', methods=['GET'])
 def tokenizeSample(value):

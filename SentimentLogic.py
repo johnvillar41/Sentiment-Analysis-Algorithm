@@ -108,4 +108,4 @@ class SentimentLogic:
             sentimentScore = "Neutral"
         else:
             sentimentScore = "Negative"
-        return SentiwordModel(polarity*100, positiveScore*100, negativeScore*100,sentimentScore).toJSON()        
+        return SentiwordModel(polarity*100, positiveScore*100, negativeScore*100,sentimentScore).toJSON()       

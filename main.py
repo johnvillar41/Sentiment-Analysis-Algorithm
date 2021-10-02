@@ -1,5 +1,6 @@
 from TextCleaning import TextCleaning
 from SentimentLogic import SentimentLogic
+import SWNBigram
 from flask import Flask
 
 app = Flask(__name__)
@@ -16,7 +17,8 @@ def Vader(value):
 
 @app.route('/SWN/<string:value>', methods=['GET'])
 def SWN(value):
-    return SentimentLogic.swn_polarity(value)
+    # return SentimentLogic.swn_polarity(value)
+    return str(SWNBigram.swn_polarity(value))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=105)

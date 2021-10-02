@@ -158,28 +158,4 @@ def swn_polarity(text):
         else:
             sentiment += unigramSent
 
-
-    # judgment call ? Default to positive or negative
-    if not tokens_count:
-        return 0
-
-    # sum greater than 0 => positive sentiment
-    if sentiment >= 0:
-        return 1
-
-    # negative sentiment
-    return 0
-
-
-# Since we're shuffling, you'll get diffrent results
-print(swn_polarity(train_X[0]), train_y[0])  # 1 1
-print(swn_polarity(train_X[1]), train_y[1])  # 0 0
-print(swn_polarity(train_X[2]), train_y[2])  # 0 1
-print(swn_polarity(train_X[3]), train_y[3])  # 1 1
-print(swn_polarity(train_X[4]), train_y[4])  # 1 1`
-
-from sklearn.metrics import accuracy_score
-
-pred_y = [swn_polarity(text) for text in test_X]
-
-print(accuracy_score(test_y, pred_y))  # 0.6518
+    return sentiment

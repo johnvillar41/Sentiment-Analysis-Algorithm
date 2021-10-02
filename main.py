@@ -16,14 +16,7 @@ def Vader(value):
 
 @app.route('/SWN/<string:value>', methods=['GET'])
 def SWN(value):
-    return str(SentimentLogic.swn_polarity(value))
-
-
-@app.route('/clean/<string:value>', methods=['GET'])
-def tokenizeSample(value):
-    textClean = TextCleaning(value)
-    return textClean.finalTextForm()
-
+    return SentimentLogic.swn_polarity(value)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=105)

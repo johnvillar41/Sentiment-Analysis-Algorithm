@@ -1,29 +1,3 @@
-"""
-This code uses the bigram model for SentiWordNet
-It is based off of the unigram model approach
-reference : http://nlpforhackers.io/sentiment-analysis-intro/
-
-from: https://github.com/prateek22sri/Sentiment-analysis/blob/master/bigramSentiWordNet.py
-"""
-
-import pandas as pd
-
-data = pd.read_csv("labeledTrainData.tsv", header=0, delimiter="\t", quoting=3)
-
-# 25000 movie reviews
-
-import random
-random.seed(5)
-
-sentiment_data = list(zip(data["review"], data["sentiment"]))
-random.shuffle(sentiment_data)
-
-# 80% for training
-train_X, train_y = zip(*sentiment_data[:20000])
-
-# Keep 20% for testing
-test_X, test_y = zip(*sentiment_data[20000:])
-
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
 from nltk.corpus import sentiwordnet as swn
@@ -122,7 +96,7 @@ def swn_polarity(text):
             tmp1sent = swn_synset1.pos_score() - swn_synset1.neg_score()
             tmp2sent = swn_synset2.pos_score() - swn_synset2.neg_score()
 
-            if tmp1sent < 0 and tmp1sent < 0:
+            if tmp1sent < 0 and tmp2sent < 0:
                 bigramSent += -1 * min(tmp1sent, tmp2sent)
             elif tmp1sent > 0 and tmp2sent > 0:
                 bigramSent += max(tmp1sent, tmp2sent)

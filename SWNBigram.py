@@ -4,6 +4,8 @@ from nltk.corpus import sentiwordnet as swn
 from nltk import sent_tokenize, word_tokenize, pos_tag
 from nltk.util import ngrams
 
+from SentiwordModel import SentiwordModel
+
 lemmatizer = WordNetLemmatizer()
 
 
@@ -32,9 +34,9 @@ def swn_polarity(text):
     Return a sentiment polarity: 0 = negative, 1 = positive
     """
 
-    sentiment = 0.0
+    polarityScore = 0.0
     tokens_count = 0
-
+    sentimentScore = ""
     text = clean_text(text)
 
     raw_sentences = sent_tokenize(text)
@@ -43,11 +45,9 @@ def swn_polarity(text):
         unigramSent = 0.0
         bigramSent = 0.0
 
-
         ##############################
         #       Bigram Model
         ##############################
-
 
         tagged_sentence = pos_tag(word_tokenize(raw_sentence))
         tokens, tags = zip(*tagged_sentence)
@@ -122,14 +122,28 @@ def swn_polarity(text):
 
             # Take the first sense, the most common
             synset = synsets[0]
-            swn_synset = swn.senti_synset(synset.name())
-
+            swn_synset = swn.senti_synset(synset.name())            
+        
             unigramSent += swn_synset.pos_score() - swn_synset.neg_score()
             tokens_count += 1
 
         if max(abs(bigramSent), abs(unigramSent)) == abs(bigramSent):
-            sentiment += bigramSent
+            polarityScore += bigramSent
         else:
-            sentiment += unigramSent
+            polarityScore += unigramSent
 
-    return sentiment
+        if polarityScore > 1:
+            polarityScore = 1
+        elif polarityScore < -1:
+            polarityScore = -1
+
+        if polarityScore > 0:
+            sentimentScore = "Positive"
+        elif polarityScore < 0:
+            sentimentScore = "Negative"
+        else:
+            sentimentScore = "Neutral"
+
+
+        sentiword = SentiwordModel(polarityScore, sentimentScore)
+    return sentiword.toJSON()

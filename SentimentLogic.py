@@ -1,5 +1,6 @@
 from flask import jsonify
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from SentiwordModel import SentiwordModel
 from VaderModel import VaderModel
 
 from nltk.stem import WordNetLemmatizer
@@ -7,6 +8,7 @@ from nltk.corpus import wordnet as wn
 from nltk.corpus import sentiwordnet as swn
 from nltk import sent_tokenize, word_tokenize, pos_tag
 lemmatizer = WordNetLemmatizer()
+
 
 class SentimentLogic:
 
@@ -55,45 +57,55 @@ class SentimentLogic:
         return None
 
     @staticmethod
+    def clean_text(text):
+        text = text.replace("<br />", " ")
+
+        return text
+
+    @staticmethod
     def swn_polarity(text):
         """
         Return a sentiment polarity: 0 = negative, 1 = positive
         """
-    
-        sentiment = 0.0
+
+        polarity = 0.0
         tokens_count = 0
-    
+        positiveScore = 0.0
+        negativeScore = 0.0
+        sentimentScore = ""
+
+        text = SentimentLogic.clean_text(text)
+
         raw_sentences = sent_tokenize(text)
         for raw_sentence in raw_sentences:
             tagged_sentence = pos_tag(word_tokenize(raw_sentence))
-    
+
             for word, tag in tagged_sentence:
                 wn_tag = SentimentLogic.penn_to_wn(tag)
                 if wn_tag not in (wn.NOUN, wn.ADJ, wn.ADV):
                     continue
-    
+
                 lemma = lemmatizer.lemmatize(word, pos=wn_tag)
                 if not lemma:
                     continue
-    
+
                 synsets = wn.synsets(lemma, pos=wn_tag)
                 if not synsets:
                     continue
-    
+
                 # Take the first sense, the most common
                 synset = synsets[0]
                 swn_synset = swn.senti_synset(synset.name())
-    
-                sentiment += swn_synset.pos_score() - swn_synset.neg_score()
+
+                positiveScore += swn_synset.pos_score()
+                negativeScore += swn_synset.neg_score()
+                polarity += swn_synset.pos_score() - swn_synset.neg_score()
                 tokens_count += 1
-    
-        # judgment call ? Default to positive or negative
-        if not tokens_count:
-            return 0
-    
-        # sum greater than 0 => positive sentiment
-        if sentiment >= 0:
-            return 1
-    
-        # negative sentiment
-        return 0
+        
+        if polarity>0:
+            sentimentScore = "Positive"
+        elif polarity == 0:
+            sentimentScore = "Neutral"
+        else:
+            sentimentScore = "Negative"
+        return SentiwordModel(polarity*100, positiveScore*100, negativeScore*100,sentimentScore).toJSON()       

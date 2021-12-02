@@ -15,10 +15,15 @@ def welcome():
 def Vader(value):
     return SentimentLogic.sentiment_scores_vader(value)
 
-@app.route('/SWN/<string:value>', methods=['GET'])
+@app.route('/SentiWordNet/<string:value>', methods=['GET'])
 def SWN(value):
     # return SentimentLogic.swn_polarity(value)
     return SWNBigram.swn_polarity(value)
+
+@app.route('/Clean/<string:value>', methods=['GET'])
+def Clean(value):
+    textClean = TextCleaning(value)
+    return textClean.finalTextForm()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=105)

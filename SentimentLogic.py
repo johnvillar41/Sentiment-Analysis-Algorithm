@@ -13,7 +13,7 @@ lemmatizer = WordNetLemmatizer()
 class SentimentLogic:
 
     @staticmethod
-    def sentiment_scores_vader(sentence):
+    def applyVader(sentence):
 
         # Create a SentimentIntensityAnalyzer object.
         sid_obj = SentimentIntensityAnalyzer()
@@ -63,7 +63,7 @@ class SentimentLogic:
         return text
 
     @staticmethod
-    def swn_polarity(text):
+    def applySentiWordNet(text):
         """
         Return a sentiment polarity: 0 = negative, 1 = positive
         """

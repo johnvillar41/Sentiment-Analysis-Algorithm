@@ -10,15 +10,13 @@ app = Flask(__name__)
 def welcome():
     return "<h3>Routes: /Vader/(Enter Sentence Message here for computation)</h3>"
 
-
 @app.route('/Vader/<string:value>', methods=['GET'])
 def Vader(value):
-    return SentimentLogic.sentiment_scores_vader(value)
+    return SentimentLogic.applyVader(value)
 
 @app.route('/SentiWordNet/<string:value>', methods=['GET'])
-def SWN(value):
-    # return SentimentLogic.swn_polarity(value)
-    return SWNBigram.swn_polarity(value)
+def SWN(value):    
+    return SentimentLogic.applySentiWordNet(value)
 
 @app.route('/Clean/<string:value>', methods=['GET'])
 def Clean(value):

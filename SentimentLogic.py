@@ -34,6 +34,10 @@ class SentimentLogic:
         vaderModel = VaderModel(negativeVal, positiveVal,
                                 neutralVal, compoundScore, compoundVal)
         return vaderModel.toJSON()
+    
+    @staticmethod
+    def applyHybrid(sentence):
+        pass
 
     @staticmethod
     def penn_to_wn(tag):
@@ -58,10 +62,12 @@ class SentimentLogic:
         negativeScore = 0.0
         sentimentScore = ""
 
+        #Text Cleaning
         text = text = re.sub('[^A-Za-z]+', ' ', text)
 
         raw_sentences = sent_tokenize(text)
         for raw_sentence in raw_sentences:
+            #Tokenization and POS Tagging
             tagged_sentence = pos_tag(word_tokenize(raw_sentence))
 
             for word, tag in tagged_sentence:

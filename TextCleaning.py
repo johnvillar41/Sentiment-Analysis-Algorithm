@@ -1,4 +1,3 @@
-
 import re
 import nltk
 from nltk.corpus import stopwords
@@ -17,25 +16,29 @@ wordnet_lemmatizer = WordNetLemmatizer()
 
 class TextCleaning:
 
-    def __init__(self, textValue):
-        self.textValue = textValue
+    @staticmethod
+    def clean(text):
+        text = re.sub('[^A-Za-z]+', ' ', text)
+        return text
 
-    def clean(self):
-        self.textValue = re.sub('[^A-Za-z]+', ' ', self.textValue)
-
-    def tokenize(self):
-        tokens = nltk.word_tokenize(self.textValue)
+    @staticmethod
+    def tokenize(text):
+        tokens = nltk.word_tokenize(text)
         return tokens
 
-    def pos_tagging(self):
-        pos = nltk.pos_tag(self.tokenize())
+    @staticmethod
+    def pos_tagging(tokens):
+        pos = nltk.pos_tag(tokens)
         return pos
 
-    def stop_words_remove(self, tokens):
-        self.new_text = (" ").join(ele for ele in tokens if ele.lower()
-                                   not in stopwords.words('english'))
+    @staticmethod
+    def stop_words_remove(tokens, text):
+        text = (" ").join(ele for ele in tokens if ele.lower()
+                          not in stopwords.words('english'))
+        return text
 
-    def lemmatization(self, posTagged):
+    @staticmethod
+    def lemmatization(posTagged):
         lemma = []
         pos = posTagged
         for ele, tag in pos:
@@ -47,11 +50,13 @@ class TextCleaning:
                     lemma.append(wordnet_lemmatizer.lemmatize(ele, tag))
         return lemma
 
-    def finalTextForm(self):
-        self.clean()
-        tokens = self.tokenize()
-        self.stop_words_remove(tokens)
-        posTags = self.pos_tagging()
-        lemmas = self.lemmatization(posTags)
-        return str(lemmas)
-       
+    @staticmethod
+    def overallTextCleaning(text):
+        _text = TextCleaning.clean(text)
+        _tokens = TextCleaning.tokenize(_text)
+        _text = TextCleaning.stop_words_remove(_tokens, _text)
+        _pos = TextCleaning.pos_tagging(_tokens)
+        _lemmas = TextCleaning.lemmatization(_pos)
+
+        return _lemmas
+        

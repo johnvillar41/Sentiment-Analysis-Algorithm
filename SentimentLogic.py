@@ -14,13 +14,7 @@ class SentimentLogic:
 
     @staticmethod
     def applyVader(sentence):
-
-        # Create a SentimentIntensityAnalyzer object.
-        sid_obj = SentimentIntensityAnalyzer()
-
-        # polarity_scores method of SentimentIntensityAnalyzer
-        # object gives a sentiment dictionary.
-        # which contains pos, neg, neu, and compound scores.
+        sid_obj = SentimentIntensityAnalyzer()       
         sentiment_dict = sid_obj.polarity_scores(sentence)
 
         negativeVal = sentiment_dict['neg']*100
@@ -63,11 +57,7 @@ class SentimentLogic:
         return text
 
     @staticmethod
-    def applySentiWordNet(text):
-        """
-        Return a sentiment polarity: 0 = negative, 1 = positive
-        """
-
+    def applySentiWordNet(text):       
         polarity = 0.0
         tokens_count = 0
         positiveScore = 0.0

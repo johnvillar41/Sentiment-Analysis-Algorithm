@@ -1,12 +1,15 @@
 from flask import jsonify
+import nltk
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from SentiwordModel import SentiwordModel
+from TextCleaning import TextCleaning
 from VaderModel import VaderModel
 import re
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
 from nltk.corpus import sentiwordnet as swn
 from nltk import sent_tokenize, word_tokenize, pos_tag
+from nltk.corpus import stopwords
 lemmatizer = WordNetLemmatizer()
 
 
@@ -14,7 +17,7 @@ class SentimentLogic:
 
     @staticmethod
     def applyVader(sentence):
-        sid_obj = SentimentIntensityAnalyzer()       
+        sid_obj = SentimentIntensityAnalyzer()
         sentiment_dict = sid_obj.polarity_scores(sentence)
 
         negativeVal = sentiment_dict['neg']*100
@@ -34,68 +37,38 @@ class SentimentLogic:
         vaderModel = VaderModel(negativeVal, positiveVal,
                                 neutralVal, compoundScore, compoundVal)
         return vaderModel.toJSON()
-    
+
     @staticmethod
     def applyHybrid(sentence):
         pass
 
     @staticmethod
-    def penn_to_wn(tag):
-        """
-        Convert between the PennTreebank tags to simple Wordnet tags
-        """
-        if tag.startswith('J'):
-            return wn.ADJ
-        elif tag.startswith('N'):
-            return wn.NOUN
-        elif tag.startswith('R'):
-            return wn.ADV
-        elif tag.startswith('V'):
-            return wn.VERB
-        return None
-
-    @staticmethod
-    def applySentiWordNet(text):       
+    def applySentiWordNet(text):
         polarity = 0.0
         tokens_count = 0
         positiveScore = 0.0
         negativeScore = 0.0
         sentimentScore = ""
 
-        #Text Cleaning
-        text = text = re.sub('[^A-Za-z]+', ' ', text)
+        _lemmas = TextCleaning.overallTextCleaning(text)
 
-        raw_sentences = sent_tokenize(text)
-        for raw_sentence in raw_sentences:
-            #Tokenization and POS Tagging
-            tagged_sentence = pos_tag(word_tokenize(raw_sentence))
+        for lemma in _lemmas:          
+            synsets = wn.synsets(lemma)
 
-            for word, tag in tagged_sentence:
-                wn_tag = SentimentLogic.penn_to_wn(tag)
-                if wn_tag not in (wn.NOUN, wn.ADJ, wn.ADV):
-                    continue
+            # Grading of polarity
+            synset = synsets[0]
+            swn_synset = swn.senti_synset(synset.name())
 
-                lemma = lemmatizer.lemmatize(word, pos=wn_tag)
-                if not lemma:
-                    continue
+            positiveScore += swn_synset.pos_score()
+            negativeScore += swn_synset.neg_score()
+            polarity += swn_synset.pos_score() - swn_synset.neg_score()
+            tokens_count += 1
 
-                synsets = wn.synsets(lemma, pos=wn_tag)
-                if not synsets:
-                    continue
-
-                # Take the first sense, the most common
-                synset = synsets[0]
-                swn_synset = swn.senti_synset(synset.name())
-
-                positiveScore += swn_synset.pos_score()
-                negativeScore += swn_synset.neg_score()
-                polarity += swn_synset.pos_score() - swn_synset.neg_score()
-                tokens_count += 1
-        
-        if polarity>0:
+        if polarity > 0:
             sentimentScore = "Positive"
         elif polarity == 0:
             sentimentScore = "Neutral"
         else:
             sentimentScore = "Negative"
-        return SentiwordModel(polarity*100, positiveScore*100, negativeScore*100,sentimentScore).toJSON()       
+
+        return SentiwordModel(polarity*100, positiveScore*100, negativeScore*100, sentimentScore).toJSON()

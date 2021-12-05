@@ -20,7 +20,7 @@ def SWN(value):
 
 @app.route('/Clean/<string:value>', methods=['GET'])
 def Clean(value):
-    return TextCleaning.overallTextCleaning(value)
+    return str(TextCleaning.overallTextCleaning(value))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=105)

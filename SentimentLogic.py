@@ -45,24 +45,27 @@ class SentimentLogic:
     @staticmethod
     def applySentiWordNet(text):
         polarity = 0.0
-        tokens_count = 0
         positiveScore = 0.0
         negativeScore = 0.0
         sentimentScore = ""
 
         _lemmas = TextCleaning.overallTextCleaning(text)
+        print(_lemmas)
 
-        for lemma in _lemmas:          
+        for lemma in _lemmas:
             synsets = wn.synsets(lemma)
 
+            if not synsets:
+                continue
+            
             # Grading of polarity
             synset = synsets[0]
+            print(synset)
             swn_synset = swn.senti_synset(synset.name())
 
             positiveScore += swn_synset.pos_score()
             negativeScore += swn_synset.neg_score()
             polarity += swn_synset.pos_score() - swn_synset.neg_score()
-            tokens_count += 1
 
         if polarity > 0:
             sentimentScore = "Positive"

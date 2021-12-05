@@ -1,12 +1,14 @@
 from flask import jsonify
 import nltk
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from HybridModel import HybridModel
 from SentiwordModel import SentiwordModel
 from TextCleaning import TextCleaning
 from VaderModel import VaderModel
 import re
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
+import json
 from nltk.corpus import sentiwordnet as swn
 from nltk import sent_tokenize, word_tokenize, pos_tag
 from nltk.corpus import stopwords
@@ -36,11 +38,24 @@ class SentimentLogic:
 
         vaderModel = VaderModel(negativeVal, positiveVal,
                                 neutralVal, compoundScore, compoundVal)
-        return vaderModel.toJSON()
+        return vaderModel
 
     @staticmethod
     def applyHybrid(sentence):
-        pass
+        vaderModel = SentimentLogic.applyVader(sentence)
+        sentiwordnetModel = SentimentLogic.applySentiWordNet(sentence)
+      
+        hybridValue = (int(vaderModel.compoundValue) * int(sentiwordnetModel.polarityScore)) / 2
+        print(vaderModel.compoundValue)
+        print(sentiwordnetModel.polarityScore)
+        hybridScore = ""
+        if hybridValue > 0:
+            hybridScore = "Positive"
+        elif hybridValue == 0:
+            hybridScore = "Neutral"
+        else:
+            hybridScore = "Negative"
+        return HybridModel(hybridScore, hybridValue)
 
     @staticmethod
     def applySentiWordNet(text):
@@ -49,18 +64,15 @@ class SentimentLogic:
         negativeScore = 0.0
         sentimentScore = ""
 
-        _lemmas = TextCleaning.overallTextCleaning(text)
-        print(_lemmas)
-
+        _lemmas = TextCleaning.overallTextCleaning(text)    
         for lemma in _lemmas:
             synsets = wn.synsets(lemma)
 
             if not synsets:
                 continue
-            
+
             # Grading of polarity
-            synset = synsets[0]
-            print(synset)
+            synset = synsets[0]          
             swn_synset = swn.senti_synset(synset.name())
 
             positiveScore += swn_synset.pos_score()
@@ -74,4 +86,4 @@ class SentimentLogic:
         else:
             sentimentScore = "Negative"
 
-        return SentiwordModel(polarity*100, positiveScore*100, negativeScore*100, sentimentScore).toJSON()
+        return SentiwordModel(polarity*100, positiveScore*100, negativeScore*100, sentimentScore)

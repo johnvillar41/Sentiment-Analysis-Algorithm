@@ -12,11 +12,15 @@ def welcome():
 
 @app.route('/Vader/<string:value>', methods=['GET'])
 def Vader(value):
-    return SentimentLogic.applyVader(value)
+    return SentimentLogic.applyVader(value).toJSON()
 
 @app.route('/SentiWordNet/<string:value>', methods=['GET'])
 def SWN(value):    
-    return SentimentLogic.applySentiWordNet(value)
+    return SentimentLogic.applySentiWordNet(value).toJSON()
+
+@app.route('/Hybrid/<string:value>', methods=['GET'])
+def Hybrid(value):    
+    return SentimentLogic.applyHybrid(value).toJSON()
 
 @app.route('/Clean/<string:value>', methods=['GET'])
 def Clean(value):

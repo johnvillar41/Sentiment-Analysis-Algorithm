@@ -4,7 +4,7 @@ from nltk.corpus import sentiwordnet as swn
 from nltk import sent_tokenize, word_tokenize, pos_tag
 from nltk.util import ngrams
 
-from SentiwordModel import SentiwordModel
+from Models.SentiwordModel import SentiwordModel
 
 lemmatizer = WordNetLemmatizer()
 

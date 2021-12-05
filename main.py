@@ -1,6 +1,6 @@
-from TextCleaning import TextCleaning
-from SentimentLogic import SentimentLogic
-import SWNBigram
+from Logic.TextCleaning import TextCleaning
+from Logic.SentimentLogic import SentimentLogic
+import Logic.SWNBigram as SWNBigram
 from flask import Flask
 
 app = Flask(__name__)

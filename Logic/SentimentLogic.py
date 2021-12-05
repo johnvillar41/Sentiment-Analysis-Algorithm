@@ -1,14 +1,12 @@
 from flask import jsonify
-import nltk
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-from HybridModel import HybridModel
-from SentiwordModel import SentiwordModel
-from TextCleaning import TextCleaning
-from VaderModel import VaderModel
+from Models.HybridModel import HybridModel
+from Models.SentiwordModel import SentiwordModel
+from Logic.TextCleaning import TextCleaning
+from Models.VaderModel import VaderModel
 import re
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
-import json
 from nltk.corpus import sentiwordnet as swn
 from nltk import sent_tokenize, word_tokenize, pos_tag
 from nltk.corpus import stopwords
@@ -45,7 +43,7 @@ class SentimentLogic:
         vaderModel = SentimentLogic.applyVader(sentence)
         sentiwordnetModel = SentimentLogic.applySentiWordNet(sentence)
       
-        hybridValue = (int(vaderModel.compoundValue) * int(sentiwordnetModel.polarityScore)) / 2
+        hybridValue = (float(vaderModel.compoundValue) + float(sentiwordnetModel.polarityScore)) / 2
         print(vaderModel.compoundValue)
         print(sentiwordnetModel.polarityScore)
         hybridScore = ""

@@ -2,7 +2,7 @@ from flask import jsonify
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from SentiwordModel import SentiwordModel
 from VaderModel import VaderModel
-
+import re
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
 from nltk.corpus import sentiwordnet as swn
@@ -51,12 +51,6 @@ class SentimentLogic:
         return None
 
     @staticmethod
-    def clean_text(text):
-        text = text.replace("<br />", " ")
-
-        return text
-
-    @staticmethod
     def applySentiWordNet(text):       
         polarity = 0.0
         tokens_count = 0
@@ -64,7 +58,7 @@ class SentimentLogic:
         negativeScore = 0.0
         sentimentScore = ""
 
-        text = SentimentLogic.clean_text(text)
+        text = text = re.sub('[^A-Za-z]+', ' ', text)
 
         raw_sentences = sent_tokenize(text)
         for raw_sentence in raw_sentences:

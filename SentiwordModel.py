@@ -2,8 +2,10 @@ import json
 
 
 class SentiwordModel:
-    def __init__(self, polarityScore, sentimentScore):
-        self.polarityScore = polarityScore             
+    def __init__(self, polarityScore, positiveScore, negativeScore, sentimentScore):
+        self.polarityScore = polarityScore      
+        self.positiveScore = positiveScore
+        self.negativeScore = negativeScore       
         self.sentimentScore = sentimentScore
 
     def toJSON(self):

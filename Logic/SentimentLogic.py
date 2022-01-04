@@ -62,8 +62,10 @@ class SentimentLogic:
         negativeScore = 0.0
         sentimentScore = ""
 
-        _lemmas = TextCleaning.overallTextCleaning(text)    
+        _lemmas = TextCleaning.overallTextCleaning(text)   
+        count = 0 
         for lemma in _lemmas:
+            count+=1
             synsets = wn.synsets(lemma)
 
             if not synsets:
@@ -76,7 +78,8 @@ class SentimentLogic:
             positiveScore += swn_synset.pos_score()
             negativeScore += swn_synset.neg_score()
             polarity += swn_synset.pos_score() - swn_synset.neg_score()
-
+        
+        polarity = polarity/count
         if polarity > 0:
             sentimentScore = "Positive"
         elif polarity == 0:

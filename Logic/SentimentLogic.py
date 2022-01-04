@@ -79,7 +79,9 @@ class SentimentLogic:
             negativeScore += swn_synset.neg_score()
             polarity += swn_synset.pos_score() - swn_synset.neg_score()
         
-        polarity = polarity/count
+        if count != 0:
+            polarity = polarity/count
+        
         if polarity > 0:
             sentimentScore = "Positive"
         elif polarity == 0:

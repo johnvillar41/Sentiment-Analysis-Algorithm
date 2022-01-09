@@ -31,5 +31,10 @@ def Hybrid(value):
 def Clean(value):
     return str(TextCleaning.overallTextCleaning(value))
 
+@app.route('/Check/<string:value>', methods=['GET'])
+@require_appkey
+def Check(value):
+    return str(TextCleaning.checkIfWordExistOnWordNet(value)).lower()
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=105)

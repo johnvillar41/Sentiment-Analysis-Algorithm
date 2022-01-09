@@ -59,4 +59,11 @@ class TextCleaning:
         _lemmas = TextCleaning.lemmatization(_pos)
 
         return _lemmas
-        
+
+    @staticmethod
+    def checkIfWordExistOnWordNet(word):
+        wn_lemmas = set(wordnet.all_lemma_names())
+        if word in wn_lemmas:
+            return True    
+        else:
+            return False

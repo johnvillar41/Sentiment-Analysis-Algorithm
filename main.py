@@ -32,8 +32,9 @@ def Clean(value):
     return str(TextCleaning.overallTextCleaning(value))
 
 @app.route('/Check/<string:value>', methods=['GET'])
+@app.route('/Check/', methods=['GET'])
 @require_appkey
-def Check(value):
+def Check(value = None):
     return str(TextCleaning.checkIfWordExistOnWordNet(value)).lower()
 
 if __name__ == '__main__':

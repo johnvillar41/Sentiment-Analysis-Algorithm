@@ -42,4 +42,4 @@ def Check(value = None):
         return str(TextCleaning.checkIfWordExistOnWordNet(value)).lower()
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=105)
+    app.run(host='192.168.1.105', port=105)

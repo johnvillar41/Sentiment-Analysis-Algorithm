@@ -35,7 +35,8 @@ def Clean(value):
 @app.route('/Check/', methods=['GET'])
 @require_appkey
 def Check(value = None):
-    return str(TextCleaning.checkIfWordExistOnWordNet(value)).lower()
+    loweredValue = value.lower()
+    return str(TextCleaning.checkIfWordExistOnWordNet(loweredValue)).lower()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=105)

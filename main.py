@@ -37,9 +37,19 @@ def Clean(value):
 def Check(value = None):
     if value != None:
         loweredValue = value.lower()
+        if TextCleaning.checkIfWordExistOnWordNet(loweredValue):
+            print("Word Exists")
+
         return str(TextCleaning.checkIfWordExistOnWordNet(loweredValue)).lower()
     else:
         return str(TextCleaning.checkIfWordExistOnWordNet(value)).lower()
+
+@app.route('/Synonym/<string:value>', methods=['GET'])
+@app.route('/Synonym/', methods=['GET'])
+@require_appkey
+def Synonym(value = None):
+    return str(TextCleaning.getSynonym(value))
+
 
 if __name__ == '__main__':
     app.run(host='192.168.1.105', port=105)

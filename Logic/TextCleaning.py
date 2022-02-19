@@ -75,3 +75,12 @@ class TextCleaning:
                 return False
         except:
             return False
+
+    @staticmethod
+    def getSynonym(word):
+        syn = list()
+        for synset in wordnet.synsets(word):
+            for lemma in synset.lemmas():
+                syn.append(lemma.name()) 
+        
+        return syn

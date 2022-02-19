@@ -6,3 +6,4 @@ py -m pip install nltk </br>
 py -m pip install vaderSentiment</br>
 py -m pip install flask</br>
 py -m pip install pandas</br>
+py -m install pyspellchecker 
